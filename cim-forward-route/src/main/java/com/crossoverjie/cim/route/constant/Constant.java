@@ -23,7 +23,7 @@ public final class Constant {
     /**
      * 登录状态前缀
      */
-    public final static String LOGIN_STATUS_PREFIX = "login-status";
+    public final static String LOGIN_STATUS_PREFIX = "online-user:";
 
 
 }

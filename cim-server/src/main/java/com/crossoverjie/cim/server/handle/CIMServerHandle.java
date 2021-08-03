@@ -32,7 +32,6 @@ public class CIMServerHandle extends SimpleChannelInboundHandler<CIMRequestProto
 
     private final static Logger LOGGER = LoggerFactory.getLogger(CIMServerHandle.class);
 
-
     /**
      * 取消绑定
      *

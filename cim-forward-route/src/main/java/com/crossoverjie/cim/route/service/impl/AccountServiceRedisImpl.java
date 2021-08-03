@@ -102,9 +102,7 @@ public class AccountServiceRedisImpl implements AccountService {
 
     @Override
     public Map<Long, CIMServerResVO> loadRouteRelated() {
-
         Map<Long, CIMServerResVO> routes = new HashMap<>(64);
-
 
         RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();
         ScanOptions options = ScanOptions.scanOptions()
@@ -117,8 +115,8 @@ public class AccountServiceRedisImpl implements AccountService {
             String key = new String(next, StandardCharsets.UTF_8);
             LOGGER.info("key={}", key);
             parseServerInfo(routes, key);
-
         }
+
         try {
             scan.close();
         } catch (IOException e) {

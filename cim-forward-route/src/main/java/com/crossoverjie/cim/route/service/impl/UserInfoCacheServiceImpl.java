@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -53,13 +54,14 @@ public class UserInfoCacheServiceImpl implements UserInfoCacheService {
 
     @Override
     public boolean saveAndCheckUserLoginStatus(Long userId) throws Exception {
-
-        Long add = redisTemplate.opsForSet().add(LOGIN_STATUS_PREFIX, userId.toString());
-        if (add == 0){
-            return false ;
-        }else {
-            return true ;
-        }
+        long timeStamp = System.currentTimeMillis();
+        Long add = redisTemplate.opsForSet().add(LOGIN_STATUS_PREFIX + userId.toString(),  String.valueOf(timeStamp));
+//        if (add == 0){
+//            return false ;
+//        }else {
+//            return true ;
+//        }
+        return true;
     }
 
     @Override
@@ -70,12 +72,12 @@ public class UserInfoCacheServiceImpl implements UserInfoCacheService {
     @Override
     public Set<CIMUserInfo> onlineUser() {
         Set<CIMUserInfo> set = null ;
-        Set<String> members = redisTemplate.opsForSet().members(LOGIN_STATUS_PREFIX);
+        Set<String> members = redisTemplate.keys(LOGIN_STATUS_PREFIX + "*");
         for (String member : members) {
             if (set == null){
                 set = new HashSet<>(64) ;
             }
-            CIMUserInfo cimUserInfo = loadUserInfoByUserId(Long.valueOf(member)) ;
+            CIMUserInfo cimUserInfo = loadUserInfoByUserId(Long.valueOf(member.replace(LOGIN_STATUS_PREFIX, ""))) ;
             set.add(cimUserInfo) ;
         }
 
