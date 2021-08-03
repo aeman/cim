@@ -134,7 +134,7 @@ public class RouteController implements RouteApi {
         CIMUserInfo cimUserInfo = userInfoCacheService.loadUserInfoByUserId(groupReqVO.getUserId());
 
         LOGGER.info("user [{}] offline!", cimUserInfo.toString());
-        accountService.offLine(groupReqVO.getUserId());
+        accountService.offLine(groupReqVO.getUserId(), groupReqVO.getLoginTime());
 
         res.setCode(StatusEnum.SUCCESS.getCode());
         res.setMessage(StatusEnum.SUCCESS.getMessage());
@@ -217,6 +217,5 @@ public class RouteController implements RouteApi {
         res.setMessage(StatusEnum.SUCCESS.getMessage());
         return res;
     }
-
 
 }

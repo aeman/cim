@@ -22,7 +22,6 @@ import java.util.List;
 public class PrintOnlineUsersCommand implements InnerCommand {
     private final static Logger LOGGER = LoggerFactory.getLogger(PrintOnlineUsersCommand.class);
 
-
     @Autowired
     private RouteRequest routeRequest;
 

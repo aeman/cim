@@ -27,14 +27,14 @@ public interface UserInfoCacheService {
      * @return true 为可以登录 false 为已经登录
      * @throws Exception
      */
-    boolean saveAndCheckUserLoginStatus(Long userId) throws Exception ;
+    boolean saveAndCheckUserLoginStatus(Long userId, Long timeStamp) throws Exception ;
 
     /**
      * 清除用户的登录状态
      * @param userId
      * @throws Exception
      */
-    void removeLoginStatus(Long userId) throws Exception ;
+    void removeLoginStatus(Long userId, Long timeStamp) throws Exception ;
 
 
     /**

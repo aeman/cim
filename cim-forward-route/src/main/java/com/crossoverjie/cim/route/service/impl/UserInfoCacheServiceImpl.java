@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +18,7 @@ import static com.crossoverjie.cim.route.constant.Constant.LOGIN_STATUS_PREFIX;
  * Function:
  *
  * @author crossoverJie
- *         Date: 2018/12/24 11:06
+ * Date: 2018/12/24 11:06
  * @since JDK 1.8
  */
 @Service
@@ -28,57 +27,55 @@ public class UserInfoCacheServiceImpl implements UserInfoCacheService {
     /**
      * todo 本地缓存，为了防止内存撑爆，后期可换为 LRU。
      */
-    private final static Map<Long,CIMUserInfo> USER_INFO_MAP = new ConcurrentHashMap<>(64) ;
+    private final static Map<Long, CIMUserInfo> USER_INFO_MAP = new ConcurrentHashMap<>(64);
 
     @Autowired
-    private RedisTemplate<String,String> redisTemplate ;
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public CIMUserInfo loadUserInfoByUserId(Long userId) {
 
         //优先从本地缓存获取
         CIMUserInfo cimUserInfo = USER_INFO_MAP.get(userId);
-        if (cimUserInfo != null){
-            return cimUserInfo ;
+        if (cimUserInfo != null) {
+            return cimUserInfo;
         }
 
         //load redis
         String sendUserName = redisTemplate.opsForValue().get(ACCOUNT_PREFIX + userId);
-        if (sendUserName != null){
-            cimUserInfo = new CIMUserInfo(userId,sendUserName) ;
-            USER_INFO_MAP.put(userId,cimUserInfo) ;
+        if (sendUserName != null) {
+            cimUserInfo = new CIMUserInfo(userId, sendUserName);
+            USER_INFO_MAP.put(userId, cimUserInfo);
         }
 
         return cimUserInfo;
     }
 
     @Override
-    public boolean saveAndCheckUserLoginStatus(Long userId) throws Exception {
-        long timeStamp = System.currentTimeMillis();
-        Long add = redisTemplate.opsForSet().add(LOGIN_STATUS_PREFIX + userId.toString(),  String.valueOf(timeStamp));
-//        if (add == 0){
-//            return false ;
-//        }else {
-//            return true ;
-//        }
-        return true;
+    public boolean saveAndCheckUserLoginStatus(Long userId, Long timeStamp) throws Exception {
+        Long add = redisTemplate.opsForSet().add(LOGIN_STATUS_PREFIX + userId.toString(), timeStamp.toString());
+        if (add == 0){
+            return false ;
+        }else {
+            return true ;
+        }
     }
 
     @Override
-    public void removeLoginStatus(Long userId) throws Exception {
-        redisTemplate.opsForSet().remove(LOGIN_STATUS_PREFIX,userId.toString()) ;
+    public void removeLoginStatus(Long userId, Long timeSmap) throws Exception {
+        redisTemplate.opsForSet().remove(LOGIN_STATUS_PREFIX + userId.toString(), timeSmap.toString());
     }
 
     @Override
     public Set<CIMUserInfo> onlineUser() {
-        Set<CIMUserInfo> set = null ;
+        Set<CIMUserInfo> set = null;
         Set<String> members = redisTemplate.keys(LOGIN_STATUS_PREFIX + "*");
         for (String member : members) {
-            if (set == null){
-                set = new HashSet<>(64) ;
+            if (set == null) {
+                set = new HashSet<>(64);
             }
-            CIMUserInfo cimUserInfo = loadUserInfoByUserId(Long.valueOf(member.replace(LOGIN_STATUS_PREFIX, ""))) ;
-            set.add(cimUserInfo) ;
+            CIMUserInfo cimUserInfo = loadUserInfoByUserId(Long.valueOf(member.replace(LOGIN_STATUS_PREFIX, "")));
+            set.add(cimUserInfo);
         }
 
         return set;

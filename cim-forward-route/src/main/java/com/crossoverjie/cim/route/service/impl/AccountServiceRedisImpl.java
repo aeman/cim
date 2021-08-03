@@ -85,7 +85,7 @@ public class AccountServiceRedisImpl implements AccountService {
         }
 
         //登录成功，保存登录状态
-        boolean status = userInfoCacheService.saveAndCheckUserLoginStatus(loginReqVO.getUserId());
+        boolean status = userInfoCacheService.saveAndCheckUserLoginStatus(loginReqVO.getUserId(), loginReqVO.getTimeStamp());
         if (status == false) {
             //重复登录
             return StatusEnum.REPEAT_LOGIN;
@@ -164,7 +164,7 @@ public class AccountServiceRedisImpl implements AccountService {
     }
 
     @Override
-    public void offLine(Long userId) throws Exception {
+    public void offLine(Long userId, Long loginTime) throws Exception {
 
         // TODO: 2019-01-21 改为一个原子命令，以防数据一致性
 
@@ -172,6 +172,6 @@ public class AccountServiceRedisImpl implements AccountService {
         redisTemplate.delete(ROUTE_PREFIX + userId);
 
         //删除登录状态
-        userInfoCacheService.removeLoginStatus(userId);
+        userInfoCacheService.removeLoginStatus(userId, loginTime);
     }
 }

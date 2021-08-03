@@ -4,12 +4,16 @@ package com.crossoverjie.cim.common.pojo;
  * Function: 用户信息
  *
  * @author crossoverJie
- *         Date: 2018/12/24 02:33
+ * Date: 2018/12/24 02:33
  * @since JDK 1.8
  */
 public class CIMUserInfo {
-    private Long userId ;
-    private String userName ;
+
+    private Long userId;
+    private String userName;
+
+    private String device;
+    private Long timeStamp;
 
     public CIMUserInfo(Long userId, String userName) {
         this.userId = userId;
@@ -38,5 +42,22 @@ public class CIMUserInfo {
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
                 '}';
+    }
+
+    public String getDevice() {
+        return device;
+    }
+
+    public void setDevice(String device) {
+        this.device = device;
+    }
+
+
+    public Long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }
