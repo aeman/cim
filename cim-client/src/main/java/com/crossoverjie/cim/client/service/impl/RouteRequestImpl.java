@@ -35,7 +35,6 @@ import java.util.List;
  */
 @Service
 public class RouteRequestImpl implements RouteRequest {
-
     private final static Logger LOGGER = LoggerFactory.getLogger(RouteRequestImpl.class);
 
     @Autowired
@@ -53,7 +52,7 @@ public class RouteRequestImpl implements RouteRequest {
     @Override
     public void sendGroupMsg(GroupReqVO groupReqVO) throws Exception {
         RouteApi routeApi = new ProxyManager<>(RouteApi.class, routeUrl, okHttpClient).getInstance();
-        ChatReqVO chatReqVO = new ChatReqVO(groupReqVO.getUserId(), groupReqVO.getMsg());
+        ChatReqVO chatReqVO = new ChatReqVO(groupReqVO.getUserId(), groupReqVO.getToken(), groupReqVO.getMsg());
         Response response = null;
         try {
             response = (Response) routeApi.groupRoute(chatReqVO);
@@ -97,6 +96,7 @@ public class RouteRequestImpl implements RouteRequest {
         com.crossoverjie.cim.route.api.vo.req.LoginReqVO vo = new com.crossoverjie.cim.route.api.vo.req.LoginReqVO();
         vo.setUserId(loginReqVO.getUserId());
         vo.setUserName(loginReqVO.getUserName());
+        vo.setToken(loginReqVO.getToken());
 
         Response response = null;
         CIMServerResVO cimServerResVO = null;
@@ -150,7 +150,7 @@ public class RouteRequestImpl implements RouteRequest {
     @Override
     public void offLine() {
         RouteApi routeApi = new ProxyManager<>(RouteApi.class, routeUrl, okHttpClient).getInstance();
-        ChatReqVO vo = new ChatReqVO(appConfiguration.getUserId(), "offLine");
+        ChatReqVO vo = new ChatReqVO(appConfiguration.getUserId(), appConfiguration.getToken(), "offLine");
         Response response = null;
         try {
             response = (Response) routeApi.offLine(vo);

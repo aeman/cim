@@ -19,7 +19,6 @@ public class AppConfiguration {
     @Value("${app.zk.addr}")
     private String zkAddr;
 
-
     @Value("${server.port}")
     private int port;
 

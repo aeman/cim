@@ -28,7 +28,7 @@ public class AccountServiceRedisImplTest {
     public void loadRouteRelated() throws Exception {
         for (int i = 0; i < 100; i++) {
 
-            Map<Long, CIMServerResVO> longCIMServerResVOMap = accountService.loadRouteRelated();
+            Map<String, CIMServerResVO> longCIMServerResVOMap = accountService.loadRouteRelated();
             LOGGER.info("longCIMServerResVOMap={},cun={}" , JSON.toJSONString(longCIMServerResVOMap),i);
         }
         TimeUnit.SECONDS.sleep(10);

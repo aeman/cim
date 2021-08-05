@@ -82,12 +82,13 @@ public class CIMServer {
      * @param sendMsgReqVO 消息
      */
     public void sendMsg(SendMsgReqVO sendMsgReqVO){
-        NioSocketChannel socketChannel = SessionSocketHolder.get(sendMsgReqVO.getUserId());
+        NioSocketChannel socketChannel = SessionSocketHolder.get(sendMsgReqVO.getToken());
 
         if (null == socketChannel) {
             LOGGER.error("client {} offline!", sendMsgReqVO.getUserId());
             return;
         }
+
         CIMRequestProto.CIMReqProtocol protocol = CIMRequestProto.CIMReqProtocol.newBuilder()
                 .setRequestId(sendMsgReqVO.getUserId())
                 .setReqMsg(sendMsgReqVO.getMsg())

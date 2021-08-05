@@ -18,9 +18,9 @@ public class ChatReqVO extends BaseRequest {
     @ApiModelProperty(required = true, value = "userId", example = "1545574049323")
     private Long userId;
 
-    @NotNull(message = "loginTime 不能为空")
-    @ApiModelProperty(required = true, value = "loginTime", example = "1627960344685")
-    private Long loginTime;
+    @NotNull(message = "token 不能为空")
+    @ApiModelProperty(required = true, value = "token", example = "abcde12345")
+    private String token;
 
     @NotNull(message = "msg 不能为空")
     @ApiModelProperty(required = true, value = "msg", example = "hello")
@@ -29,8 +29,9 @@ public class ChatReqVO extends BaseRequest {
     public ChatReqVO() {
     }
 
-    public ChatReqVO(Long userId, String msg) {
+    public ChatReqVO(Long userId, String token, String msg) {
         this.userId = userId;
+        this.token = token;
         this.msg = msg;
     }
 
@@ -58,12 +59,11 @@ public class ChatReqVO extends BaseRequest {
                 "} " + super.toString();
     }
 
-
-    public Long getLoginTime() {
-        return loginTime;
+    public String getToken() {
+        return token;
     }
 
-    public void setLoginTime(Long loginTime) {
-        this.loginTime = loginTime;
+    public void setToken(String token) {
+        this.token = token;
     }
 }

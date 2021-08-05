@@ -74,9 +74,14 @@ public class CIMServerHandle extends SimpleChannelInboundHandler<CIMRequestProto
         LOGGER.info("received msg=[{}]", msg.toString());
 
         if (msg.getType() == Constants.CommandType.LOGIN) {
+            Long userId = msg.getRequestId();
+            String token = msg.getReqMsg().split(":")[0];
+            String userName = msg.getReqMsg().split(":")[1];
+            CIMUserInfo cimUserInfo = new CIMUserInfo(userId, token, userName);
+
             //保存客户端与 Channel 之间的关系
-            SessionSocketHolder.put(msg.getRequestId(), (NioSocketChannel) ctx.channel());
-            SessionSocketHolder.saveSession(msg.getRequestId(), msg.getReqMsg());
+            SessionSocketHolder.put(token, (NioSocketChannel) ctx.channel());
+            SessionSocketHolder.saveSession(token, cimUserInfo);
             LOGGER.info("client [{}] online success!!", msg.getReqMsg());
         }
 

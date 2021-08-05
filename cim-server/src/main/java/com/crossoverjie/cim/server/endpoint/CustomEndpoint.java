@@ -10,14 +10,15 @@ import java.util.Map;
  * Function: 自定义端点监控
  *
  * @author crossoverJie
- *         Date: 17/04/2018 14:47
+ * Date: 17/04/2018 14:47
  * @since JDK 1.8
  */
-public class CustomEndpoint extends AbstractEndpoint<Map<Long,NioSocketChannel>> {
+public class CustomEndpoint extends AbstractEndpoint<Map<String, NioSocketChannel>> {
 
 
     /**
      * 监控端点的 访问地址
+     *
      * @param id
      */
     public CustomEndpoint(String id) {
@@ -26,7 +27,7 @@ public class CustomEndpoint extends AbstractEndpoint<Map<Long,NioSocketChannel>>
     }
 
     @Override
-    public Map<Long, NioSocketChannel> invoke() {
+    public Map<String, NioSocketChannel> invoke() {
         return SessionSocketHolder.getRelationShip();
     }
 }

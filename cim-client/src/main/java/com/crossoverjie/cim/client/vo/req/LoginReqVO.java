@@ -12,10 +12,12 @@ import com.crossoverjie.cim.common.req.BaseRequest;
 public class LoginReqVO extends BaseRequest{
     private Long userId ;
     private String userName ;
+    private String token;
 
-    public LoginReqVO(Long userId, String userName) {
+    public LoginReqVO(Long userId, String userName, String token) {
         this.userId = userId;
         this.userName = userName;
+        this.token = token;
     }
 
     public Long getUserId() {
@@ -40,5 +42,13 @@ public class LoginReqVO extends BaseRequest{
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
                 "} " + super.toString();
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

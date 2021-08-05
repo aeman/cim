@@ -43,7 +43,7 @@ public class RouteHandler {
     public void userOffLine(CIMUserInfo userInfo, NioSocketChannel channel) throws IOException {
         if (userInfo != null) {
             LOGGER.info("Account [{}] offline", userInfo.getUserName());
-            SessionSocketHolder.removeSession(userInfo.getUserId());
+            SessionSocketHolder.removeSession(userInfo.getToken());
             //清除路由关系
             clearRouteInfo(userInfo);
         }
@@ -61,7 +61,7 @@ public class RouteHandler {
     public void clearRouteInfo(CIMUserInfo userInfo) {
         RouteApi routeApi = new ProxyManager<>(RouteApi.class, configuration.getRouteUrl(), okHttpClient).getInstance();
         Response response = null;
-        ChatReqVO vo = new ChatReqVO(userInfo.getUserId(), userInfo.getUserName());
+        ChatReqVO vo = new ChatReqVO(userInfo.getUserId(), userInfo.getToken(), userInfo.getUserName());
         try {
             response = (Response) routeApi.offLine(vo);
         } catch (Exception e){

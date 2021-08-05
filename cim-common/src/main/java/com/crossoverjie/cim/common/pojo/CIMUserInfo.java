@@ -11,13 +11,12 @@ public class CIMUserInfo {
 
     private Long userId;
     private String userName;
+    private String token;
 
-    private String device;
-    private Long timeStamp;
-
-    public CIMUserInfo(Long userId, String userName) {
+    public CIMUserInfo(Long userId, String userName, String token) {
         this.userId = userId;
         this.userName = userName;
+        this.token = token;
     }
 
     public Long getUserId() {
@@ -44,20 +43,11 @@ public class CIMUserInfo {
                 '}';
     }
 
-    public String getDevice() {
-        return device;
+    public String getToken() {
+        return token;
     }
 
-    public void setDevice(String device) {
-        this.device = device;
-    }
-
-
-    public Long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(Long timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setToken(String token) {
+        this.token = token;
     }
 }

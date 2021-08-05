@@ -6,6 +6,7 @@ import com.crossoverjie.cim.route.api.vo.req.LoginReqVO;
 import com.crossoverjie.cim.route.api.vo.res.CIMServerResVO;
 import com.crossoverjie.cim.route.api.vo.res.RegisterInfoResVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,14 +46,14 @@ public interface AccountService {
      * 加载所有用户的路有关系
      * @return 所有的路由关系
      */
-    Map<Long, CIMServerResVO> loadRouteRelated() ;
+    Map<String, CIMServerResVO> loadRouteRelated() ;
 
     /**
      * 获取某个用户的路有关系
      * @param userId
      * @return 获取某个用户的路有关系
      */
-    CIMServerResVO loadRouteRelatedByUserId(Long userId) ;
+    List<CIMServerResVO> loadRouteRelatedByUserId(Long userId) ;
 
 
     /**
@@ -69,5 +70,5 @@ public interface AccountService {
      * @param userId 下线用户ID
      * @throws Exception
      */
-    void offLine(Long userId, Long loginTime) throws Exception;
+    void offLine(Long userId, String token) throws Exception;
 }

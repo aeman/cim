@@ -18,10 +18,11 @@ public class GroupReqVO extends BaseRequest {
     @ApiModelProperty(required = true, value = "消息发送者的 userId", example = "1545574049323")
     private Long userId ;
 
-
     @NotNull(message = "msg 不能为空")
     @ApiModelProperty(required = true, value = "msg", example = "hello")
     private String msg ;
+
+    private String token;
 
     public GroupReqVO(Long userId, String msg) {
         this.userId = userId;
@@ -50,5 +51,13 @@ public class GroupReqVO extends BaseRequest {
                 "userId=" + userId +
                 ", msg='" + msg + '\'' +
                 "} " + super.toString();
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

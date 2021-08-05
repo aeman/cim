@@ -48,8 +48,11 @@ public class CIMClient {
     @Value("${cim.user.id}")
     private long userId;
 
-    @Value("${cim.user.userName}")
+    @Value("${cim.user.name}")
     private String userName;
+
+    @Value("${cim.user.token}")
+    private String token;
 
     private SocketChannel channel;
 
@@ -127,7 +130,7 @@ public class CIMClient {
      * @throws Exception
      */
     private CIMServerResVO.ServerInfo userLogin() {
-        LoginReqVO loginReqVO = new LoginReqVO(userId, userName);
+        LoginReqVO loginReqVO = new LoginReqVO(userId, userName, token);
         CIMServerResVO.ServerInfo cimServer = null;
         try {
             cimServer = routeRequest.getCIMServer(loginReqVO);
@@ -155,7 +158,7 @@ public class CIMClient {
     private void loginCIMServer() {
         CIMRequestProto.CIMReqProtocol login = CIMRequestProto.CIMReqProtocol.newBuilder()
                 .setRequestId(userId)
-                .setReqMsg(userName)
+                .setReqMsg(token + ":" + userName)
                 .setType(Constants.CommandType.LOGIN)
                 .build();
         ChannelFuture future = channel.writeAndFlush(login);

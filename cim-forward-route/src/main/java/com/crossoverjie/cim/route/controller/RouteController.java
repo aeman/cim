@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -69,9 +70,11 @@ public class RouteController implements RouteApi {
         LOGGER.info("msg=[{}]", groupReqVO.toString());
 
         //获取所有的推送列表
-        Map<Long, CIMServerResVO> serverResVOMap = accountService.loadRouteRelated();
-        for (Map.Entry<Long, CIMServerResVO> cimServerResVOEntry : serverResVOMap.entrySet()) {
-            Long userId = cimServerResVOEntry.getKey();
+        Map<String, CIMServerResVO> serverResVOMap = accountService.loadRouteRelated();
+        for (Map.Entry<String, CIMServerResVO> cimServerResVOEntry : serverResVOMap.entrySet()) {
+            String idAndToken = cimServerResVOEntry.getKey();
+            Long userId = Long.valueOf(idAndToken.split(":")[0]);
+            String token = idAndToken.split(":")[1];
             CIMServerResVO cimServerResVO = cimServerResVOEntry.getValue();
             if (userId.equals(groupReqVO.getUserId())) {
                 //过滤掉自己
@@ -81,9 +84,8 @@ public class RouteController implements RouteApi {
             }
 
             //推送消息
-            ChatReqVO chatVO = new ChatReqVO(userId, groupReqVO.getMsg());
+            ChatReqVO chatVO = new ChatReqVO(userId, token, groupReqVO.getMsg());
             accountService.pushMsg(cimServerResVO, groupReqVO.getUserId(), chatVO);
-
         }
 
         res.setCode(StatusEnum.SUCCESS.getCode());
@@ -107,15 +109,16 @@ public class RouteController implements RouteApi {
 
         try {
             //获取接收消息用户的路由信息
-            CIMServerResVO cimServerResVO = accountService.loadRouteRelatedByUserId(p2pRequest.getReceiveUserId());
+            List<CIMServerResVO> cimServerResVOs = accountService.loadRouteRelatedByUserId(p2pRequest.getReceiveUserId());
 
             //p2pRequest.getReceiveUserId()==>消息接收者的 userID
-            ChatReqVO chatVO = new ChatReqVO(p2pRequest.getReceiveUserId(), p2pRequest.getMsg());
-            accountService.pushMsg(cimServerResVO, p2pRequest.getUserId(), chatVO);
+            for (CIMServerResVO cimServerResVO : cimServerResVOs) {
+                ChatReqVO chatVO = new ChatReqVO(p2pRequest.getReceiveUserId(), cimServerResVO.getToken(), p2pRequest.getMsg());
+                accountService.pushMsg(cimServerResVO, p2pRequest.getUserId(), chatVO);
+            }
 
             res.setCode(StatusEnum.SUCCESS.getCode());
             res.setMessage(StatusEnum.SUCCESS.getMessage());
-
         } catch (CIMException e) {
             res.setCode(e.getErrorCode());
             res.setMessage(e.getErrorMessage());
@@ -132,9 +135,9 @@ public class RouteController implements RouteApi {
         BaseResponse<NULLBody> res = new BaseResponse();
 
         CIMUserInfo cimUserInfo = userInfoCacheService.loadUserInfoByUserId(groupReqVO.getUserId());
-
         LOGGER.info("user [{}] offline!", cimUserInfo.toString());
-        accountService.offLine(groupReqVO.getUserId(), groupReqVO.getLoginTime());
+
+        accountService.offLine(groupReqVO.getUserId(), groupReqVO.getToken());
 
         res.setCode(StatusEnum.SUCCESS.getCode());
         res.setMessage(StatusEnum.SUCCESS.getMessage());
@@ -154,7 +157,9 @@ public class RouteController implements RouteApi {
         BaseResponse<CIMServerResVO> res = new BaseResponse();
 
         // check server available
-        String server = routeHandle.routeServer(serverCache.getServerList(), String.valueOf(loginReqVO.getUserId()));
+        String server = routeHandle.routeServer(serverCache.getServerList(),
+                loginReqVO.getUserId().toString() + loginReqVO.getToken());
+
         LOGGER.info("userName=[{}] route server info=[{}]", loginReqVO.getUserName(), server);
 
         RouteInfo routeInfo = RouteInfoParseUtil.parse(server);

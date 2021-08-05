@@ -26,13 +26,13 @@ public class UserInfoCacheServiceImplTest {
 
     @Test
     public void checkUserLoginStatus() throws Exception {
-        boolean status = userInfoCacheService.saveAndCheckUserLoginStatus(2000L, 111L);
+        boolean status = userInfoCacheService.saveAndCheckUserLoginStatus(2000L, "aaa");
         LOGGER.info("status={}", status);
     }
 
     @Test
     public void removeLoginStatus() throws Exception {
-        userInfoCacheService.removeLoginStatus(2000L, 111L);
+        userInfoCacheService.removeLoginStatus(2000L, "abc111");
     }
 
     @Test

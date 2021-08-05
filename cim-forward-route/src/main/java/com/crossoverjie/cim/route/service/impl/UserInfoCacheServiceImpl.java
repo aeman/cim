@@ -44,7 +44,7 @@ public class UserInfoCacheServiceImpl implements UserInfoCacheService {
         //load redis
         String sendUserName = redisTemplate.opsForValue().get(ACCOUNT_PREFIX + userId);
         if (sendUserName != null) {
-            cimUserInfo = new CIMUserInfo(userId, sendUserName);
+            cimUserInfo = new CIMUserInfo(userId, sendUserName, "");
             USER_INFO_MAP.put(userId, cimUserInfo);
         }
 
@@ -52,29 +52,28 @@ public class UserInfoCacheServiceImpl implements UserInfoCacheService {
     }
 
     @Override
-    public boolean saveAndCheckUserLoginStatus(Long userId, Long timeStamp) throws Exception {
-        Long add = redisTemplate.opsForSet().add(LOGIN_STATUS_PREFIX + userId.toString(), timeStamp.toString());
-        if (add == 0){
-            return false ;
-        }else {
-            return true ;
+    public boolean saveAndCheckUserLoginStatus(Long userId, String token) throws Exception {
+        Long add = redisTemplate.opsForSet().add(LOGIN_STATUS_PREFIX + userId, token);
+        if (add == 0) {
+            return false;
+        } else {
+            return true;
         }
     }
 
     @Override
-    public void removeLoginStatus(Long userId, Long timeSmap) throws Exception {
-        redisTemplate.opsForSet().remove(LOGIN_STATUS_PREFIX + userId.toString(), timeSmap.toString());
+    public void removeLoginStatus(Long userId, String token) throws Exception {
+        redisTemplate.opsForSet().remove(LOGIN_STATUS_PREFIX + userId, token);
     }
 
     @Override
     public Set<CIMUserInfo> onlineUser() {
-        Set<CIMUserInfo> set = null;
-        Set<String> members = redisTemplate.keys(LOGIN_STATUS_PREFIX + "*");
-        for (String member : members) {
-            if (set == null) {
-                set = new HashSet<>(64);
-            }
-            CIMUserInfo cimUserInfo = loadUserInfoByUserId(Long.valueOf(member.replace(LOGIN_STATUS_PREFIX, "")));
+        Set<CIMUserInfo> set = new HashSet<>(64);
+
+        Set<String> keys = redisTemplate.keys(LOGIN_STATUS_PREFIX + "*");
+        for (String key : keys) {
+            Long userId = Long.valueOf(key.replace(LOGIN_STATUS_PREFIX, ""));
+            CIMUserInfo cimUserInfo = loadUserInfoByUserId(userId);
             set.add(cimUserInfo);
         }
 

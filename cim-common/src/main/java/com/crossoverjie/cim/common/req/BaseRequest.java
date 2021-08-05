@@ -36,7 +36,6 @@ public class BaseRequest {
         this.timeStamp = timeStamp;
     }
 
-
     @Override
     public String toString() {
         return "BaseRequest{" +
