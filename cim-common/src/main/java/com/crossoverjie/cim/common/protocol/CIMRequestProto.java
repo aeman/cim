@@ -3,7 +3,7 @@
 
 package com.crossoverjie.cim.common.protocol;
 
-public final class CIMRequzestProto {
+public final class CIMRequestProto {
   private CIMRequestProto() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
