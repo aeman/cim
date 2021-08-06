@@ -77,7 +77,7 @@ public class CIMServerHandle extends SimpleChannelInboundHandler<CIMRequestProto
             Long userId = msg.getRequestId();
             String token = msg.getReqMsg().split(":")[0];
             String userName = msg.getReqMsg().split(":")[1];
-            CIMUserInfo cimUserInfo = new CIMUserInfo(userId, token, userName);
+            CIMUserInfo cimUserInfo = new CIMUserInfo(userId, userName, token);
 
             //保存客户端与 Channel 之间的关系
             SessionSocketHolder.put(token, (NioSocketChannel) ctx.channel());

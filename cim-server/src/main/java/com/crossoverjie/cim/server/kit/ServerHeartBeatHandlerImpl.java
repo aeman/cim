@@ -32,7 +32,6 @@ public class ServerHeartBeatHandlerImpl implements HeartBeatHandler {
 
     @Override
     public void process(ChannelHandlerContext ctx) throws Exception {
-
         long heartBeatTime = appConfiguration.getHeartBeatTime() * 1000;
 
         Long lastReadTime = NettyAttrUtil.getReaderTime(ctx.channel());
