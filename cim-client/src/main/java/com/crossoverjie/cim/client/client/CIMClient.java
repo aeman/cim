@@ -41,7 +41,7 @@ import javax.annotation.PostConstruct;
 @Component
 public class CIMClient {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(CIMClient.class);
+    private final static Logger logger = LoggerFactory.getLogger(CIMClient.class);
 
     private EventLoopGroup group = new NioEventLoopGroup(0, new DefaultThreadFactory("cim-work"));
 
@@ -101,8 +101,7 @@ public class CIMClient {
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
-                .handler(new CIMClientHandleInitializer())
-        ;
+                .handler(new CIMClientHandleInitializer());
 
         ChannelFuture future = null;
         try {
@@ -111,14 +110,14 @@ public class CIMClient {
             errorCount++;
 
             if (errorCount >= configuration.getErrorCount()) {
-                LOGGER.error("连接失败次数达到上限[{}]次", errorCount);
+                logger.error("连接失败次数达到上限[{}]次", errorCount);
                 msgHandle.shutdown();
             }
-            LOGGER.error("Connect fail!", e);
+            logger.error("Connect fail!", e);
         }
         if (future.isSuccess()) {
             echoService.echo("Start cim client success!");
-            LOGGER.info("启动 cim client 成功");
+            logger.info("启动 cim client 成功");
         }
         channel = (SocketChannel) future.channel();
     }
@@ -139,7 +138,7 @@ public class CIMClient {
             clientInfo.saveServiceInfo(cimServer.getIp() + ":" + cimServer.getCimServerPort())
                     .saveUserInfo(userId, userName);
 
-            LOGGER.info("cimServer=[{}]", cimServer.toString());
+            logger.info("cimServer=[{}]", cimServer.toString());
         } catch (Exception e) {
             errorCount++;
 
@@ -147,7 +146,7 @@ public class CIMClient {
                 echoService.echo("The maximum number of reconnections has been reached[{}]times, close cim client!", errorCount);
                 msgHandle.shutdown();
             }
-            LOGGER.error("login fail", e);
+            logger.error("login fail", e);
         }
         return cimServer;
     }
@@ -177,7 +176,7 @@ public class CIMClient {
         message.writeBytes(msg.getBytes());
         ChannelFuture future = channel.writeAndFlush(message);
         future.addListener((ChannelFutureListener) channelFuture ->
-                LOGGER.info("客户端手动发消息成功={}", msg));
+                logger.info("客户端手动发消息成功={}", msg));
 
     }
 
@@ -197,7 +196,7 @@ public class CIMClient {
 
         ChannelFuture future = channel.writeAndFlush(protocol);
         future.addListener((ChannelFutureListener) channelFuture ->
-                LOGGER.info("客户端手动发送 Google Protocol 成功={}", googleProtocolVO.toString()));
+                logger.info("客户端手动发送 Google Protocol 成功={}", googleProtocolVO.toString()));
 
     }
 

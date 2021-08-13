@@ -13,11 +13,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class RouteApplication implements CommandLineRunner{
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(RouteApplication.class);
+	private final static Logger logger = LoggerFactory.getLogger(RouteApplication.class);
 
 	public static void main(String[] args) {
         SpringApplication.run(RouteApplication.class, args);
-		LOGGER.info("Start cim route success!!!");
+		logger.info("Start cim route success!!!");
 	}
 
 	@Override

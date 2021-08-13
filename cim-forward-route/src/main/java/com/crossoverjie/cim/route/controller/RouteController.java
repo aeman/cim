@@ -43,7 +43,7 @@ import java.util.Set;
 @Controller
 @RequestMapping("/")
 public class RouteController implements RouteApi {
-    private final static Logger LOGGER = LoggerFactory.getLogger(RouteController.class);
+    private final static Logger logger = LoggerFactory.getLogger(RouteController.class);
 
     @Autowired
     private ServerCache serverCache;
@@ -67,7 +67,7 @@ public class RouteController implements RouteApi {
     public BaseResponse<NULLBody> groupRoute(@RequestBody ChatReqVO groupReqVO) throws Exception {
         BaseResponse<NULLBody> res = new BaseResponse();
 
-        LOGGER.info("msg=[{}]", groupReqVO.toString());
+        logger.info("msg=[{}]", groupReqVO.toString());
 
         //获取所有的推送列表
         Map<String, CIMServerResVO> serverResVOMap = accountService.loadRouteRelated();
@@ -79,7 +79,7 @@ public class RouteController implements RouteApi {
             if (userId.equals(groupReqVO.getUserId())) {
                 //过滤掉自己
                 CIMUserInfo cimUserInfo = userInfoCacheService.loadUserInfoByUserId(groupReqVO.getUserId());
-                LOGGER.warn("过滤掉了发送者 userId={}", cimUserInfo.toString());
+                logger.warn("过滤掉了发送者 userId={}", cimUserInfo.toString());
                 continue;
             }
 
@@ -135,7 +135,7 @@ public class RouteController implements RouteApi {
         BaseResponse<NULLBody> res = new BaseResponse();
 
         CIMUserInfo cimUserInfo = userInfoCacheService.loadUserInfoByUserId(groupReqVO.getUserId());
-        LOGGER.info("user [{}] offline!", cimUserInfo.toString());
+        logger.info("user [{}] offline!", cimUserInfo.toString());
 
         accountService.offLine(groupReqVO.getUserId(), groupReqVO.getToken());
 
@@ -160,7 +160,7 @@ public class RouteController implements RouteApi {
         String server = routeHandle.routeServer(serverCache.getServerList(),
                 loginReqVO.getUserId().toString() + loginReqVO.getToken());
 
-        LOGGER.info("userName=[{}] route server info=[{}]", loginReqVO.getUserName(), server);
+        logger.info("userName=[{}] route server info=[{}]", loginReqVO.getUserName(), server);
 
         RouteInfo routeInfo = RouteInfoParseUtil.parse(server);
         commonBizService.checkServerAvailable(routeInfo);

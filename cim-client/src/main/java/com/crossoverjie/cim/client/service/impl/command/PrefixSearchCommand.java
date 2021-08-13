@@ -21,8 +21,7 @@ import java.util.List;
  */
 @Service
 public class PrefixSearchCommand implements InnerCommand {
-    private final static Logger LOGGER = LoggerFactory.getLogger(PrefixSearchCommand.class);
-
+    private final static Logger logger = LoggerFactory.getLogger(PrefixSearchCommand.class);
 
     @Autowired
     private RouteRequest routeRequest ;
@@ -48,7 +47,7 @@ public class PrefixSearchCommand implements InnerCommand {
             }
 
         } catch (Exception e) {
-            LOGGER.error("Exception", e);
+            logger.error("Exception", e);
         }
     }
 }

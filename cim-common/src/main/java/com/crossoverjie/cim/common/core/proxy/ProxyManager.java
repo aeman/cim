@@ -23,7 +23,7 @@ import static com.crossoverjie.cim.common.enums.StatusEnum.VALIDATION_FAIL;
  */
 public final class ProxyManager<T> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ProxyManager.class);
+    private final static Logger logger = LoggerFactory.getLogger(ProxyManager.class);
 
     private Class<T> clazz;
 

@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Service
 public class PrintOnlineUsersCommand implements InnerCommand {
-    private final static Logger LOGGER = LoggerFactory.getLogger(PrintOnlineUsersCommand.class);
+    private final static Logger logger = LoggerFactory.getLogger(PrintOnlineUsersCommand.class);
 
     @Autowired
     private RouteRequest routeRequest;
@@ -40,7 +40,7 @@ public class PrintOnlineUsersCommand implements InnerCommand {
             echoService.echo("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
         } catch (Exception e) {
-            LOGGER.error("Exception", e);
+            logger.error("Exception", e);
         }
     }
 }

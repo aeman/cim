@@ -24,9 +24,7 @@ import java.util.concurrent.*;
  */
 @Configuration
 public class BeanConfig {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(BeanConfig.class);
-
+    private final static Logger logger = LoggerFactory.getLogger(BeanConfig.class);
 
     @Value("${cim.user.id}")
     private long userId;
@@ -36,7 +34,6 @@ public class BeanConfig {
 
     @Value("${cim.callback.thread.pool.size}")
     private int poolSize;
-
 
     /**
      * 创建心跳单例
@@ -67,7 +64,6 @@ public class BeanConfig {
         return builder.build();
     }
 
-
     /**
      * 创建回调线程池
      * @return
@@ -82,7 +78,6 @@ public class BeanConfig {
         ThreadPoolExecutor productExecutor = new ThreadPoolExecutor(poolSize, poolSize, 1, TimeUnit.MILLISECONDS, queue,product);
         return  productExecutor ;
     }
-
 
     @Bean("scheduledTask")
     public ScheduledExecutorService buildSchedule(){
@@ -105,11 +100,9 @@ public class BeanConfig {
         return caller ;
     }
 
-
     @Bean
     public RingBufferWheel bufferWheel(){
         ExecutorService executorService = Executors.newFixedThreadPool(2) ;
         return new RingBufferWheel(executorService) ;
     }
-
 }
